@@ -6,7 +6,7 @@ import java.net.*;
 import java.io.*;
 
 public class WikiScraper {
-
+    
 	public static void main(String[] args) {
 
         scrapeTopic("/wiki/Python");

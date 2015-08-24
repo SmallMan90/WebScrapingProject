@@ -1,55 +1,29 @@
 package com.karza.webscraping5.verifypan;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.junit.Test;
-
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
 
 
-public class CheckPan extends TestCase{
+public class CheckPan {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		org.junit.runner.JUnitCore.main("com.karza.webscraping5.verifypan.CheckPan");
-	}
-	
-
-	@Test
-	public void test() throws FailingHttpStatusCodeException,
-	MalformedURLException, IOException {
-		
-		
-		WebClient webClient = new WebClient(BrowserVersion.CHROME);
-		
-
-		
-		HtmlPage inputPage = webClient.getPage("http://mahavat.gov.in/Tin_Search/Tinsearch.jsp");
-		HtmlForm form = inputPage.getForms().get(0);
-		
-		HtmlSubmitInput button = (HtmlSubmitInput) form.getInputsByName("Submit");
-		
-		HtmlTextInput UserInput = form.getInputByName("pan");
-		
-		UserInput.setValueAttribute("AZVPD1468R");
-		
-		HtmlPage outputPage = button.click();
+		 Connection.Response loginForm = Jsoup.connect("http://mahavat.gov.in/Tin_Search/Tinsearch.jsp").userAgent("Mozilla")
+	                .method(Connection.Method.POST)
+	                .execute();
+	        Document document = Jsoup.connect("http://mahavat.gov.in/Tin_Search/Tinsearch.jsp").userAgent("Mozilla")
+	                .data("cookieexists", "false")
+	                .data("pan", "AACPM9386P")
+	                .data("Submit", "SEARCH")
+	                .cookies(loginForm.cookies())
+	                .post();
+	    
 		 
-	    String Result = outputPage.getFirstByXPath("//td[@class='subhead-link'");
-	    
-	    webClient.close();
-	    
-	    System.out.println(Result);
-	    
-	    assertEquals(Result, "Records not found");
+		 System.out.println(document);
+		
 	}
 
 }
